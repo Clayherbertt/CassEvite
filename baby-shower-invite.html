@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baby Shower – Two Little Sweeties</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, 'Times New Roman', serif;
+      background: linear-gradient(to bottom right, #fce7f3, #fdf2f8, #ffe4e6);
+      color: #4a4a4a;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-wrapper {
+      position: relative;
+      max-width: 36rem;
+      width: 100%;
+    }
+
+    .card-corner-berry {
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      width: 4rem;
+      height: auto;
+      z-index: 0;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+      cursor: pointer;
+    }
+
+    .admin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom right, #fce7f3, #fdf2f8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .admin-overlay.show {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-code-box {
+      background: #fff;
+      padding: 0 2rem 2rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 20px 60px rgba(236, 72, 153, 0.2), 0 8px 24px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(249, 168, 212, 0.5);
+      text-align: center;
+      max-width: 22rem;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-code-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #f9a8d4, #ec4899, #f9a8d4);
+      border-radius: 1.25rem 1.25rem 0 0;
+    }
+
+    .admin-code-box h2 {
+      margin: 1.5rem 0 1.25rem;
+      color: #be185d;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+
+    .admin-code-box input {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      font-size: 1.1rem;
+      border: 2px solid #fbcfe8;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #4a4a4a;
+      background: #fdf2f8;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .admin-code-box input::placeholder {
+      color: #d6d3d1;
+      letter-spacing: 0.05em;
+    }
+
+    .admin-code-box input:focus {
+      outline: none;
+      border-color: #f472b6;
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+      background: #fff;
+    }
+
+    .admin-code-box .btn-submit-code {
+      padding: 0.75rem 2rem;
+      background: linear-gradient(180deg, #f472b6, #ec4899);
+      color: #fff;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .admin-code-box .btn-submit-code:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.4);
+    }
+
+    .admin-code-box .btn-submit-code:active {
+      transform: translateY(0);
+    }
+
+    .admin-code-box .error-msg {
+      color: #dc2626;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+    }
+
+    .admin-list-container {
+      display: none;
+      max-width: 28rem;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 0 0.5rem;
+    }
+
+    .admin-list-container.show {
+      display: block;
+    }
+
+    .admin-list-title {
+      text-align: center;
+      color: #be185d;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .admin-list-summary {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #78716c;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-list-section {
+      background: #fff;
+      border-radius: 1.25rem;
+      padding: 1.5rem 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(249, 168, 212, 0.4);
+    }
+
+    .admin-list-section h2 {
+      font-size: 0.85rem;
+      color: #be185d;
+      margin: 0 0 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid #fbcfe8;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+
+    .admin-list-section.no h2 {
+      color: #78716c;
+      border-color: #e7e5e4;
+    }
+
+    .admin-list { list-style: none; padding: 0; margin: 0; }
+    .admin-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #fdf2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .admin-list li:last-child { border-bottom: none; }
+    .admin-list .name { font-weight: 600; color: #4a4a4a; }
+    .admin-list .guests-badge {
+      font-size: 0.8rem;
+      color: #be185d;
+      background: #fdf2f8;
+      padding: 0.25rem 0.6rem;
+      border-radius: 1rem;
+      font-weight: 500;
+    }
+    .admin-list .date {
+      font-size: 0.75rem;
+      color: #a8a29e;
+    }
+    .admin-list .empty {
+      color: #a8a29e;
+      font-style: italic;
+      padding: 1.25rem 0;
+      list-style: none;
+    }
+    .admin-close-btn {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: #fff;
+      border: 2px solid #f9a8d4;
+      color: #ec4899;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .admin-close-btn:hover {
+      background: #fdf2f8;
+      color: #be185d;
+    }
+
+    .card {
+      max-width: 36rem;
+      width: 100%;
+      background: url('Card%20Pink%20Background%20.jpg') center/cover;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 3rem 2.5rem;
+      }
+    }
+
+    .headline {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .headline h1 {
+      font-size: 1.875rem;
+      margin: 0 0 0.25rem;
+      color: #ec4899;
+      font-weight: 600;
+      animation: headline-pop 0.8s ease-out both;
+    }
+
+    .headline p {
+      font-size: 1.25rem;
+      margin: 0;
+      color: #ec4899;
+      font-weight: 500;
+      animation: headline-pop 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes headline-pop {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .headline h1 { font-size: 2.25rem; }
+      .headline p { font-size: 1.5rem; }
+    }
+
+    .strawberries-section {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 200px;
+      margin: 2rem -5rem 2rem -5rem;
+      padding-right: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .strawberries-section {
+        min-height: 240px;
+        margin: 2rem -10rem 2rem -10rem;
+        padding-right: 4rem;
+      }
+    }
+
+    .strawberries-glow {
+      position: absolute;
+      width: 18rem;
+      height: 18rem;
+      border-radius: 50%;
+      background: linear-gradient(to bottom right, #fbcfe8, #fecdd3, #f9a8d4);
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    @media (min-width: 768px) {
+      .strawberries-glow {
+        width: 24rem;
+        height: 24rem;
+      }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.05); opacity: 0.4; }
+    }
+
+    .strawberries-img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 52rem;
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+      animation: strawberries-enter 1.2s ease-out 0.3s both,
+                 branch-sway 4s ease-in-out 1.5s infinite;
+      margin-right: -12%;
+      transform-origin: right center;
+    }
+
+    @media (min-width: 768px) {
+      .strawberries-img {
+        max-width: 64rem;
+        margin-right: -20%;
+        margin-left: -25%;
+      }
+    }
+
+    @keyframes strawberries-enter {
+      from {
+        transform: translateX(35%) rotate(-45deg);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0) rotate(-4deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes branch-sway {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+    }
+
+    .event-details {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .event-details .section-title:nth-of-type(1) {
+      animation: headline-pop 0.8s ease-out 0.4s both;
+    }
+
+    .event-details .section-title:nth-of-type(2) {
+      animation: headline-pop 0.8s ease-out 0.5s both;
+    }
+
+    .event-details .honoring {
+      animation: headline-pop 0.8s ease-out 0.6s both;
+    }
+
+    .event-details .detail-line {
+      animation: headline-pop 0.8s ease-out 0.7s both;
+    }
+
+    .event-details .address {
+      animation: headline-pop 0.8s ease-out 0.8s both;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: #f472b6;
+      margin: 0 0 0.5rem;
+      font-family: system-ui, sans-serif;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .honoring {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ec4899;
+      margin: 0.5rem 0 0.75rem;
+      letter-spacing: 0.08em;
+      text-shadow:
+        0 0 12px rgba(236, 72, 153, 0.3),
+        0 0 24px rgba(236, 72, 153, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    @media (min-width: 768px) {
+      .honoring {
+        font-size: 3.5rem;
+        letter-spacing: 0.1em;
+      }
+    }
+
+    .detail-line {
+      font-size: 1.15rem;
+      margin: 0.4rem 0;
+      color: #5c4a4a;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .detail-line strong {
+      color: #be185d;
+      font-weight: 600;
+    }
+
+    .address {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-top: 1rem;
+      color: #5c4a4a;
+      letter-spacing: 0.01em;
+      max-width: 20rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #6b4a4a;
+      margin: 0 0 1.5rem;
+      padding: 1.25rem 1rem;
+      max-width: 22rem;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+
+    .message::before {
+      content: '"';
+      position: absolute;
+      top: -0.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-family: Georgia, serif;
+      color: rgba(249, 168, 212, 0.5);
+      line-height: 1;
+    }
+
+    .message::after {
+      content: '';
+      display: block;
+      width: 4rem;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #f9a8d4, transparent);
+      margin: 1rem auto 0;
+      border-radius: 1px;
+    }
+
+    .scroll-reveal .scroll-reveal-item {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .scroll-reveal.visible .scroll-reveal-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal .scroll-reveal-item:nth-child(1) { transition-delay: 0.1s; }
+    .scroll-reveal .scroll-reveal-item:nth-child(2) { transition-delay: 0.2s; }
+    .scroll-reveal .scroll-reveal-item:nth-child(3) { transition-delay: 0.3s; }
+    .scroll-reveal .scroll-reveal-item:nth-child(4) { transition-delay: 0.4s; }
+
+    .rsvp-section .section-title {
+      margin-bottom: 1rem;
+    }
+
+    .rsvp-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .rsvp-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      font-family: inherit;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-yes {
+      background: #f472b6;
+      color: #fff;
+    }
+
+    .btn-yes:hover {
+      background: #ec4899;
+      box-shadow: 0 10px 15px -3px rgba(236, 72, 153, 0.3);
+    }
+
+    .btn-yes.selected {
+      background: #ec4899;
+      box-shadow: 0 10px 15px -3px rgba(236, 72, 153, 0.3);
+    }
+
+    .btn-no {
+      background: #e7e5e4;
+      color: #44403c;
+    }
+
+    .btn-no:hover {
+      background: #d6d3d1;
+    }
+
+    .btn-no.selected {
+      background: #a8a29e;
+      color: #fff;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .action-buttons .btn-link:last-child {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons .btn-link:last-child {
+        grid-column: 1;
+      }
+    }
+
+    .btn-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 1rem;
+      border: 2px solid #f472b6;
+      color: #f472b6;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-link:hover {
+      background: #f472b6;
+      color: #fff;
+    }
+
+    .btn-link:active {
+      transform: scale(0.97);
+    }
+
+    .rsvp-dropdown {
+      display: none;
+      margin-top: 1rem;
+      padding: 0 1.5rem 1.5rem;
+      background: #fff;
+      border: 1px solid rgba(249, 168, 212, 0.5);
+      border-radius: 1.25rem;
+      box-shadow: 0 12px 40px rgba(236, 72, 153, 0.15), 0 4px 16px rgba(0, 0, 0, 0.06);
+      animation: dropdown-in 0.3s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rsvp-dropdown::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #f9a8d4, #ec4899, #f9a8d4);
+      border-radius: 1.25rem 1.25rem 0 0;
+    }
+
+    .rsvp-dropdown.show {
+      display: block;
+    }
+
+    @keyframes dropdown-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rsvp-dropdown label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #be185d;
+      margin-bottom: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .rsvp-dropdown label:first-of-type {
+      margin-top: 1.25rem;
+    }
+
+    .rsvp-dropdown input,
+    .rsvp-dropdown select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      margin-bottom: 0;
+      border: 2px solid #fbcfe8;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #4a4a4a;
+      background: #fdf2f8;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .rsvp-dropdown input::placeholder {
+      color: #d6d3d1;
+    }
+
+    .rsvp-dropdown input:focus,
+    .rsvp-dropdown select:focus {
+      outline: none;
+      border-color: #f472b6;
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+      background: #fff;
+    }
+
+    .rsvp-dropdown .btn-submit {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: linear-gradient(180deg, #f472b6, #ec4899);
+      color: #fff;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 1.25rem;
+      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .rsvp-dropdown .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.4);
+    }
+
+    .rsvp-dropdown .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .confirmation {
+      margin-top: 0.75rem;
+      margin-bottom: 0;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.75rem;
+      font-size: 0.9rem;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .confirmation.show {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .confirmation.yes {
+      background: rgba(244, 114, 182, 0.2);
+      color: #be185d;
+      border: 1px solid #f9a8d4;
+    }
+
+    .confirmation.no {
+      background: rgba(120, 113, 108, 0.15);
+      color: #57534e;
+      border: 1px solid #e7e5e4;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .falling-zone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .falling-strawberry {
+      position: absolute;
+      width: 40px;
+      height: auto;
+      animation: fall linear forwards;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-40px) rotate(0deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card-wrapper">
+    <img src="Single%20Berry.png" alt="Admin access" class="card-corner-berry" id="admin-berry" aria-hidden="true">
+    <div class="card">
+<div class="headline">
+      <h1>TWO Little Sweeties</h1>
+      <p>ARE ON THE WAY</p>
+    </div>
+
+    <div class="strawberries-section">
+      <div class="strawberries-glow" aria-hidden="true"></div>
+      <img
+        src="ChatGPT%20Image%20Mar%207,%202026%20at%2012_37_24%20PM.png"
+        alt="Two cute strawberries on a vine"
+        class="strawberries-img"
+      />
+    </div>
+
+    <div class="event-details">
+      <p class="section-title">PLEASE JOIN US FOR A BABY SHOWER</p>
+      <p class="section-title">HONORING</p>
+      <p class="honoring">Cassidy McHale</p>
+      <p class="detail-line"><strong>Saturday, May 16th</strong></p>
+      <p class="detail-line"><strong>11:30 AM – 1:00 PM</strong></p>
+      <div class="address">
+        Aurelio's Pizza of Tinley Park<br>
+        15901 Oak Park Ave<br>
+        Tinley Park, IL 60477
+      </div>
+    </div>
+
+    <p class="message">
+      Join us as we celebrate the upcoming arrival of two little sweeties! Food, drinks, and fun will be provided.
+    </p>
+
+    <div class="rsvp-section scroll-reveal" id="rsvp-section">
+      <p class="section-title scroll-reveal-item">Kindly RSVP</p>
+      <div class="rsvp-buttons scroll-reveal-item">
+        <button type="button" class="btn btn-yes" data-rsvp="yes">Yes, I'll be there</button>
+        <button type="button" class="btn btn-no" data-rsvp="no">Sorry, can't make it</button>
+      </div>
+      <div id="rsvp-dropdown" class="rsvp-dropdown scroll-reveal-item">
+        <form id="rsvp-form">
+          <label for="rsvp-name">Your name</label>
+          <input type="text" id="rsvp-name" name="name" placeholder="Enter your name" required>
+          <label for="rsvp-guests">Number of guests</label>
+          <select id="rsvp-guests" name="guests" required>
+            <option value="">Select...</option>
+            <option value="1">Just me</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+          <button type="submit" class="btn-submit">Submit RSVP</button>
+        </form>
+      </div>
+      <div id="rsvp-no-dropdown" class="rsvp-dropdown scroll-reveal-item">
+        <form id="rsvp-no-form">
+          <label for="rsvp-first-name">First name</label>
+          <input type="text" id="rsvp-first-name" name="firstName" placeholder="First name" required>
+          <label for="rsvp-last-name">Last name</label>
+          <input type="text" id="rsvp-last-name" name="lastName" placeholder="Last name" required>
+          <button type="submit" class="btn-submit">Submit</button>
+        </form>
+      </div>
+      <div id="confirmation" class="confirmation scroll-reveal-item" role="status" aria-live="polite"></div>
+      <div class="action-buttons scroll-reveal-item">
+        <a href="https://maps.google.com/?q=15901+Oak+Park+Ave+Tinley+Park+IL+60477" target="_blank" rel="noopener noreferrer" class="btn-link">View Map</a>
+        <a href="#" id="add-to-calendar" class="btn-link">Add to Calendar</a>
+        <a href="https://my.babylist.com/baby-cassidy-mchale" target="_blank" rel="noopener noreferrer" class="btn-link">View Registry</a>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div id="falling-zone" class="falling-zone" aria-hidden="true"></div>
+
+  <div id="admin-overlay" class="admin-overlay">
+    <button type="button" class="admin-close-btn" id="admin-close" aria-label="Close">&times;</button>
+    <div id="admin-code-box" class="admin-code-box">
+      <h2>Enter code to view RSVP list</h2>
+      <input type="text" id="admin-code-input" placeholder="Code" autocomplete="off">
+      <button type="button" class="btn-submit-code" id="admin-code-submit">Submit</button>
+      <p id="admin-code-error" class="error-msg" style="display: none;">Incorrect code</p>
+    </div>
+    <div id="admin-list-container" class="admin-list-container">
+      <h1 class="admin-list-title">Baby Shower RSVPs</h1>
+      <p id="admin-list-summary" class="admin-list-summary"></p>
+      <div class="admin-list-section">
+        <h2>Yes, attending</h2>
+        <ul id="admin-yes-list" class="admin-list"></ul>
+      </div>
+      <div class="admin-list-section no">
+        <h2>Sorry, can't make it</h2>
+        <ul id="admin-no-list" class="admin-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    (function () {
+      var key = (window.SUPABASE_ANON_KEY || '').trim();
+      var supabase = window.supabase && key && key !== 'YOUR_ANON_KEY'
+        ? window.supabase.createClient(window.SUPABASE_URL, key)
+        : null;
+
+      var confirmationEl = document.getElementById('confirmation');
+      var fallingZone = document.getElementById('falling-zone');
+      var addToCalLink = document.getElementById('add-to-calendar');
+      var strawberryImg = 'ChatGPT%20Image%20Mar%207,%202026%20at%2012_37_24%20PM.png';
+
+      function showConfirmation(isYes) {
+        confirmationEl.textContent = isYes
+          ? "We can't wait to see you!"
+          : "We'll miss you! Thanks for letting us know.";
+        confirmationEl.className = 'confirmation show ' + (isYes ? 'yes' : 'no');
+        document.querySelectorAll('[data-rsvp]').forEach(function (btn) {
+          btn.classList.remove('selected');
+          if (btn.getAttribute('data-rsvp') === (isYes ? 'yes' : 'no')) {
+            btn.classList.add('selected');
+          }
+        });
+      }
+
+      function animateStrawberries() {
+        var count = 10;
+        var duration = 2500;
+        for (var i = 0; i < count; i++) {
+          (function (index) {
+            setTimeout(function () {
+              var el = document.createElement('img');
+              el.src = strawberryImg;
+              el.alt = '';
+              el.className = 'falling-strawberry';
+              el.style.left = Math.random() * 100 + '%';
+              el.style.animationDuration = (duration / 1000) + 's';
+              el.style.animationDelay = (Math.random() * 0.3) + 's';
+              fallingZone.appendChild(el);
+              setTimeout(function () {
+                if (el.parentNode) el.parentNode.removeChild(el);
+              }, duration + 400);
+            }, index * 100);
+          })(i);
+        }
+      }
+
+      var rsvpDropdown = document.getElementById('rsvp-dropdown');
+      var rsvpNoDropdown = document.getElementById('rsvp-no-dropdown');
+      var rsvpForm = document.getElementById('rsvp-form');
+      var rsvpNoForm = document.getElementById('rsvp-no-form');
+
+      function saveRsvp(data) {
+        if (supabase) {
+          supabase.from('rsvps').insert([data]).then(function () {});
+        }
+      }
+
+      function onRsvp(isYes) {
+        if (isYes) {
+          rsvpDropdown.classList.add('show');
+          rsvpNoDropdown.classList.remove('show');
+          confirmationEl.textContent = '';
+          confirmationEl.classList.remove('show');
+          } else {
+          rsvpDropdown.classList.remove('show');
+          rsvpNoDropdown.classList.add('show');
+          confirmationEl.textContent = '';
+          confirmationEl.classList.remove('show');
+        }
+        document.querySelectorAll('[data-rsvp]').forEach(function (btn) {
+          btn.classList.remove('selected');
+          if (btn.getAttribute('data-rsvp') === (isYes ? 'yes' : 'no')) {
+            btn.classList.add('selected');
+          }
+        });
+      }
+
+      rsvpForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = document.getElementById('rsvp-name').value.trim();
+        var guests = document.getElementById('rsvp-guests').value;
+        var guestText = guests ? ' (' + guests + ' guest' + (guests !== '1' ? 's' : '') + ')' : '';
+        saveRsvp({ response: 'yes', name: name || null, guests: guests || null });
+        rsvpDropdown.classList.remove('show');
+        rsvpForm.reset();
+        confirmationEl.textContent = "We can't wait to see you" + (name ? ', ' + name : '') + guestText + "!";
+        confirmationEl.className = 'confirmation show yes';
+        animateStrawberries();
+      });
+
+      rsvpNoForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var firstName = document.getElementById('rsvp-first-name').value.trim();
+        var lastName = document.getElementById('rsvp-last-name').value.trim();
+        var fullName = (firstName + ' ' + lastName).trim() || null;
+        saveRsvp({ response: 'no', name: fullName, guests: null });
+        rsvpNoDropdown.classList.remove('show');
+        rsvpNoForm.reset();
+        confirmationEl.textContent = "We'll miss you! Thanks for letting us know.";
+        confirmationEl.className = 'confirmation show no';
+      });
+
+      document.querySelectorAll('[data-rsvp]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          onRsvp(this.getAttribute('data-rsvp') === 'yes');
+        });
+      });
+
+      function buildGoogleCalendarUrl() {
+        var start = '20260516T163000';  // Saturday, May 16, 2026
+        var end = '20260516T180000';
+        var title = encodeURIComponent('Baby Shower – Cassidy McHale');
+        var details = encodeURIComponent('Join us as we celebrate the upcoming arrival of two little sweeties! Food, drinks, and fun will be provided.\n\nAurelio\'s Pizza of Tinley Park\n15901 Oak Park Ave\nTinley Park, IL 60477');
+        var location = encodeURIComponent('15901 Oak Park Ave, Tinley Park, IL 60477');
+        return 'https://www.google.com/calendar/render?action=TEMPLATE&text=' + title + '&dates=' + start + '/' + end + '&details=' + details + '&location=' + location;
+      }
+
+      addToCalLink.href = buildGoogleCalendarUrl();
+      addToCalLink.setAttribute('target', '_blank');
+      addToCalLink.setAttribute('rel', 'noopener noreferrer');
+
+      var ADMIN_CODE = 'Twins1';
+      var adminBerry = document.getElementById('admin-berry');
+      var adminOverlay = document.getElementById('admin-overlay');
+      var adminCodeBox = document.getElementById('admin-code-box');
+      var adminListContainer = document.getElementById('admin-list-container');
+      var adminCodeInput = document.getElementById('admin-code-input');
+      var adminCodeSubmit = document.getElementById('admin-code-submit');
+      var adminCodeError = document.getElementById('admin-code-error');
+      var adminClose = document.getElementById('admin-close');
+
+      function showAdminOverlay() {
+        adminOverlay.classList.add('show');
+        adminCodeBox.style.display = 'block';
+        adminListContainer.classList.remove('show');
+        adminCodeInput.value = '';
+        adminCodeError.style.display = 'none';
+      }
+
+      function hideAdminOverlay() {
+        adminOverlay.classList.remove('show');
+      }
+
+      function loadAdminList() {
+        if (!supabase) return;
+        supabase.from('rsvps').select('*').order('created_at', { ascending: false })
+          .then(function (result) {
+            var yesList = document.getElementById('admin-yes-list');
+            var noList = document.getElementById('admin-no-list');
+            var yes = (result.data || []).filter(function (r) { return r.response === 'yes'; });
+            var no = (result.data || []).filter(function (r) { return r.response === 'no'; });
+            function fmt(d) {
+              try {
+                return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+              } catch (_) { return ''; }
+            }
+            yesList.innerHTML = yes.length === 0 ? '<li class="empty">No RSVPs yet</li>' : yes.map(function (r) {
+              var g = r.guests ? '<span class="guests-badge">' + r.guests + ' guest' + (r.guests !== '1' ? 's' : '') + '</span>' : '';
+              return '<li><span class="name">' + (r.name || 'Guest') + '</span>' + g + '</li>';
+            }).join('');
+            noList.innerHTML = no.length === 0 ? '<li class="empty">None yet</li>' : no.map(function (r) {
+              return '<li><span class="name">' + (r.name || 'Guest') + '</span></li>';
+            }).join('');
+            var summaryEl = document.getElementById('admin-list-summary');
+            if (summaryEl) summaryEl.textContent = yes.length + ' attending · ' + no.length + ' declined';
+          });
+      }
+
+      if (adminBerry) adminBerry.addEventListener('click', showAdminOverlay);
+      if (adminClose) adminClose.addEventListener('click', hideAdminOverlay);
+      if (adminCodeSubmit) adminCodeSubmit.addEventListener('click', function () {
+        if (adminCodeInput.value.trim() === ADMIN_CODE) {
+          adminCodeBox.style.display = 'none';
+          adminListContainer.classList.add('show');
+          loadAdminList();
+          adminCodeError.style.display = 'none';
+        } else {
+          adminCodeError.style.display = 'block';
+        }
+      });
+      if (adminCodeInput) adminCodeInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') adminCodeSubmit.click();
+      });
+
+      var rsvpSection = document.getElementById('rsvp-section');
+      if (rsvpSection && 'IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+        observer.observe(rsvpSection);
+      } else if (rsvpSection) {
+        rsvpSection.classList.add('visible');
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSVP List – Baby Shower</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      background: linear-gradient(to bottom right, #fce7f3, #fdf2f8);
+      min-height: 100vh;
+      padding: 2rem;
+      color: #4a4a4a;
+    }
+    h1 {
+      text-align: center;
+      color: #ec4899;
+      margin-bottom: 2rem;
+    }
+    .container {
+      max-width: 40rem;
+      margin: 0 auto;
+    }
+    .section {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border: 1px solid rgba(249, 168, 212, 0.3);
+    }
+    .section h2 {
+      font-size: 1.1rem;
+      color: #be185d;
+      margin: 0 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #f9a8d4;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .section.yes h2 { color: #be185d; }
+    .section.no h2 { color: #78716c; }
+    .section.no { border-color: rgba(120, 113, 108, 0.2); }
+    .section.no h2 { border-color: #d6d3d1; }
+    .list { list-style: none; padding: 0; margin: 0; }
+    .list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .list li:last-child { border-bottom: none; }
+    .list .name { font-weight: 600; color: #4a4a4a; }
+    .list .guests {
+      font-size: 0.9rem;
+      color: #78716c;
+      background: #f5f5f5;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+    .list .date {
+      font-size: 0.8rem;
+      color: #a8a29e;
+    }
+    .empty {
+      color: #a8a29e;
+      font-style: italic;
+      padding: 1rem 0;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #78716c;
+    }
+    .error {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Baby Shower RSVPs</h1>
+    <div id="loading" class="loading">Loading...</div>
+    <div id="content" style="display: none;">
+      <div class="section yes">
+        <h2>Yes, attending</h2>
+        <ul id="yes-list" class="list"></ul>
+      </div>
+      <div class="section no">
+        <h2>Sorry, can't make it</h2>
+        <ul id="no-list" class="list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    (function () {
+      var key = (window.SUPABASE_ANON_KEY || '').trim();
+      var supabase = key && key !== 'YOUR_ANON_KEY'
+        ? window.supabase.createClient(window.SUPABASE_URL, key)
+        : null;
+
+      var loadingEl = document.getElementById('loading');
+      var contentEl = document.getElementById('content');
+      var yesList = document.getElementById('yes-list');
+      var noList = document.getElementById('no-list');
+
+      function formatDate(iso) {
+        try {
+          var d = new Date(iso);
+          return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+        } catch (_) { return ''; }
+      }
+
+      function render() {
+        if (!supabase) {
+          loadingEl.innerHTML = '<p class="error">Add your Supabase anon key in supabase-config.js</p>';
+          return;
+        }
+        supabase.from('rsvps').select('*').order('created_at', { ascending: false })
+          .then(function (result) {
+            loadingEl.style.display = 'none';
+            contentEl.style.display = 'block';
+            if (result.error) {
+              yesList.parentElement.innerHTML = '<p class="error">' + result.error.message + '</p>';
+              return;
+            }
+            var yes = (result.data || []).filter(function (r) { return r.response === 'yes'; });
+            var no = (result.data || []).filter(function (r) { return r.response === 'no'; });
+
+            yesList.innerHTML = yes.length === 0
+              ? '<li class="empty">No RSVPs yet</li>'
+              : yes.map(function (r) {
+                  var guests = r.guests ? '<span class="guests">' + r.guests + ' guest' + (r.guests !== '1' ? 's' : '') + '</span>' : '';
+                  return '<li><span class="name">' + (r.name || 'Guest') + '</span>' + guests + '<span class="date">' + formatDate(r.created_at) + '</span></li>';
+                }).join('');
+            noList.innerHTML = no.length === 0
+              ? '<li class="empty">None yet</li>'
+              : no.map(function (r) {
+                  return '<li><span class="name">' + (r.name || 'Guest') + '</span><span class="date">' + formatDate(r.created_at) + '</span></li>';
+                }).join('');
+          });
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>
