@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diaper Raffle – Two Little Sweeties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, 'Times New Roman', serif;
+      background: linear-gradient(to bottom right, #fce7f3, #fdf2f8, #ffe4e6);
+      color: #4a4a4a;
+      padding: 2rem 1rem;
+    }
+
+    .page-content {
+      max-width: 36rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .title-section {
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: titleReveal 0.9s ease-out forwards;
+    }
+
+    .title-decoration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .title-line {
+      flex: 1;
+      max-width: 5rem;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #f9a8d4, #ec4899, #f9a8d4, transparent);
+      opacity: 0;
+      transform-origin: center;
+      animation: lineReveal 0.6s ease-out 0.3s forwards;
+    }
+
+    .title-line.left {
+      background: linear-gradient(90deg, transparent, #f9a8d4, #ec4899);
+    }
+
+    .title-line.right {
+      background: linear-gradient(90deg, #ec4899, #f9a8d4, transparent);
+    }
+
+    .title-ornament {
+      font-size: 0.75rem;
+      color: #ec4899;
+      opacity: 0;
+      letter-spacing: 0.3em;
+      animation: titleReveal 0.6s ease-out 0.2s forwards;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #ec4899;
+      margin: 0;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: titleReveal 0.8s ease-out 0.2s forwards;
+      text-shadow:
+        0 0 12px rgba(236, 72, 153, 0.3),
+        0 0 24px rgba(236, 72, 153, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .title-underline {
+      width: 8rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #f9a8d4, #ec4899, #f9a8d4, transparent);
+      margin: 0.75rem auto 0;
+      opacity: 0;
+      transform-origin: center;
+      animation: lineReveal 0.6s ease-out 0.5s forwards;
+    }
+
+    @keyframes titleReveal {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes lineReveal {
+      from {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      to {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #f472b6;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.1rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #ec4899;
+    }
+
+    .diaper-image {
+      max-width: 12rem;
+      width: 100%;
+      height: auto;
+      margin: 0 auto 1.5rem;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(236, 72, 153, 0.2));
+    }
+
+    .details-decoration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .details-decoration .line {
+      flex: 1;
+      max-width: 4rem;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #f9a8d4, #ec4899);
+      transform-origin: center;
+      animation: lineReveal 0.6s ease-out 0.4s forwards;
+      opacity: 0;
+    }
+
+    .details-decoration .line.right {
+      background: linear-gradient(90deg, #ec4899, #f9a8d4, transparent);
+    }
+
+    .details-decoration .ornament {
+      font-size: 0.65rem;
+      color: #ec4899;
+      letter-spacing: 0.25em;
+      opacity: 0;
+      animation: titleReveal 0.5s ease-out 0.35s forwards;
+    }
+
+    .raffle-details {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #f472b6;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 0;
+      text-align: center;
+      padding: 0 0.5rem;
+    }
+
+    .raffle-details .entry-rule {
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .raffle-details .ship-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .raffle-details .address {
+      line-height: 1.6;
+      font-style: normal;
+    }
+
+    .raffle-details-underline {
+      width: 10rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #f9a8d4, #ec4899, #f9a8d4, transparent);
+      margin: 1.5rem auto 2rem;
+      transform-origin: center;
+      animation: lineReveal 0.6s ease-out 0.6s forwards;
+      opacity: 0;
+    }
+
+    .back-link-wrap {
+      margin-top: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(249, 168, 212, 0.4);
+      position: relative;
+    }
+
+    .back-link-wrap::before {
+      content: '✦';
+      position: absolute;
+      top: -0.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      color: #ec4899;
+      background: linear-gradient(to bottom right, #fce7f3, #fdf2f8);
+      padding: 0 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-content">
+    <div class="title-section">
+      <div class="title-decoration">
+        <span class="title-line left"></span>
+        <span class="title-ornament">✦ ✦ ✦</span>
+        <span class="title-line right"></span>
+      </div>
+      <h1>Diaper Raffle</h1>
+      <div class="title-underline"></div>
+    </div>
+    <img src="assets/vecteezy_napkin-baby-accessory_24095735.png" alt="Baby diaper" class="diaper-image">
+    <div class="details-decoration">
+      <span class="line"></span>
+      <span class="ornament">— ♦ —</span>
+      <span class="line right"></span>
+    </div>
+    <div class="raffle-details">
+      <p class="entry-rule">1 pack of diapers = 1 raffle entry</p>
+      <p class="ship-label">Ship to:</p>
+      <p class="address">
+        Cassidy & Cam<br>
+        1929 E Springfield Pl<br>
+        Chandler, AZ 85286
+      </p>
+    </div>
+    <div class="raffle-details-underline"></div>
+    <div class="back-link-wrap">
+      <a href="baby-shower-invite.html" class="back-link">← Back to invite</a>
+    </div>
+  </div>
+</body>
+</html>

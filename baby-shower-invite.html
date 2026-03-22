@@ -494,18 +494,6 @@
       position: relative;
     }
 
-    .message::before {
-      content: '"';
-      position: absolute;
-      top: -0.25rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 3rem;
-      font-family: Georgia, serif;
-      color: rgba(249, 168, 212, 0.5);
-      line-height: 1;
-    }
-
     .message::after {
       content: '';
       display: block;
@@ -602,6 +590,18 @@
 
     .action-buttons .btn-link:last-child {
       grid-column: 1 / -1;
+    }
+
+    .registry-disclaimer {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #f472b6;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.4;
+      margin: 0.5rem 0;
+      padding: 0 0.5rem;
     }
 
     @media (max-width: 480px) {
@@ -842,7 +842,7 @@
     <div class="rsvp-section scroll-reveal" id="rsvp-section">
       <p class="section-title scroll-reveal-item">Kindly RSVP</p>
       <div class="rsvp-buttons scroll-reveal-item">
-        <button type="button" class="btn btn-yes" data-rsvp="yes">Yes, I'll be there</button>
+        <button type="button" class="btn btn-yes" data-rsvp="yes">Sweet! I'll be there</button>
         <button type="button" class="btn btn-no" data-rsvp="no">Sorry, can't make it</button>
       </div>
       <div id="rsvp-dropdown" class="rsvp-dropdown scroll-reveal-item">
@@ -873,8 +873,9 @@
       </div>
       <div id="confirmation" class="confirmation scroll-reveal-item" role="status" aria-live="polite"></div>
       <div class="action-buttons scroll-reveal-item">
-        <a href="https://maps.google.com/?q=15901+Oak+Park+Ave+Tinley+Park+IL+60477" target="_blank" rel="noopener noreferrer" class="btn-link">View Map</a>
+        <a href="diaper-raffle.html" class="btn-link">Diaper Raffle</a>
         <a href="#" id="add-to-calendar" class="btn-link">Add to Calendar</a>
+        <p class="registry-disclaimer">Please see registry below.<br>We kindly ask that any larger gifts be shipped directly to the address in the registry</p>
         <a href="https://my.babylist.com/baby-cassidy-mchale" target="_blank" rel="noopener noreferrer" class="btn-link">View Registry</a>
       </div>
     </div>
